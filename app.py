@@ -46,6 +46,22 @@ def search():
             limit=10
         )
 
+        prefix_hits = []
+        if len(exact_hits) < 10:
+            prefix_filter = models.Filter(
+                must=[models.FieldCondition(
+                    key="first_word_prefixes",
+                    match=models.MatchValue(value=fw)
+                )]
+            )
+            prefix_hits = client.search(
+                collection_name="products",
+                query_filter=prefix_filter,
+                query_vector=vec,
+                limit=10 - len(exact_hits)
+            )
+
+
         for bucket in (exact_hits, prefix_hits, substr, rest):
             bucket.sort(key=lambda h: h.score, reverse=True)
 
