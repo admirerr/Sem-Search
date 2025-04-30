@@ -25,7 +25,13 @@ def normalize_text(s: str) -> str:
 @app.route("/search", methods=["GET"])
 def search():
     try:
-       
+        q = (request.args.get("query") or "").strip()
+        if not q:
+            return jsonify({"status": False, "error": "Query text is required"}), 400
+
+        nq   = normalize_text(q)
+        fw   = nq.split()[0] if nq.split() else ""
+        vec  = model.encode(q).tolist()
 
         for bucket in (exact_hits, prefix_hits, substr, rest):
             bucket.sort(key=lambda h: h.score, reverse=True)
