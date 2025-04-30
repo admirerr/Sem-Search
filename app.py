@@ -33,6 +33,19 @@ def search():
         fw   = nq.split()[0] if nq.split() else ""
         vec  = model.encode(q).tolist()
 
+        exact_filter = models.Filter(
+            must=[models.FieldCondition(
+                key="first_word",
+                match=models.MatchValue(value=fw)
+            )]
+        )
+        exact_hits = client.search(
+            collection_name="products",
+            query_filter=exact_filter,
+            query_vector=vec,
+            limit=10
+        )
+
         for bucket in (exact_hits, prefix_hits, substr, rest):
             bucket.sort(key=lambda h: h.score, reverse=True)
 
