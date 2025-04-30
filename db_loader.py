@@ -7,11 +7,7 @@ import re
 client = QdrantClient(host="localhost", port=6333)
 
 
-df1 = pd.read_csv("data1.csv")
-df2 = pd.read_csv("data2.csv")
-
-
-df = pd.concat([df1, df2], ignore_index=True)
+df = pd.read_csv("data.csv")
 
 
 model = SentenceTransformer('sentence-transformers/multi-qa-MiniLM-L6-cos-v1')
