@@ -61,6 +61,21 @@ def search():
                 limit=10 - len(exact_hits)
             )
 
+        remaining = 10 - len(exact_hits) - len(prefix_hits)
+        semantic_hits = []
+        if remaining > 0:
+            candidates = client.search(
+                collection_name="products",
+                query_vector=vec,
+                limit=50
+            )
+            seen = {h.id for h in exact_hits + prefix_hits}
+            for h in candidates:
+                if h.id not in seen:
+                    semantic_hits.append(h)
+                if len(semantic_hits) >= remaining:
+                    break
+
 
         for bucket in (exact_hits, prefix_hits, substr, rest):
             bucket.sort(key=lambda h: h.score, reverse=True)
