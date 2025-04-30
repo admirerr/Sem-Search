@@ -75,7 +75,13 @@ def search():
                     semantic_hits.append(h)
                 if len(semantic_hits) >= remaining:
                     break
-
+        substr, rest = [], []
+        for h in semantic_hits:
+            nm = normalize_text(h.payload.get("Name",""))
+            if nq in nm:
+                substr.append(h)
+            else:
+                rest.append(h)
 
         for bucket in (exact_hits, prefix_hits, substr, rest):
             bucket.sort(key=lambda h: h.score, reverse=True)
