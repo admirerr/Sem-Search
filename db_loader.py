@@ -29,17 +29,6 @@ client.recreate_collection(
     },
 )
 
-
-
-def extract_first_word(text):
-    if pd.isna(text):
-        return ""
-    text = str(text).lower()
-    text = re.sub(r'[^a-z0-9\s]', '', text)
-    words = text.split()
-    return words[0] if words else ""
-
-
 chunk_size = 1000
 
 points = []
