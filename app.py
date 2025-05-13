@@ -7,7 +7,6 @@ from sentence_transformers import SentenceTransformer
 
 app = Flask(__name__)
 
-
 handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter(
     '%(asctime)s %(levelname)s %(message)s'
